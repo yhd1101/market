@@ -1,10 +1,7 @@
 import userModel from "../models/user.js";
 import jwt from "jsonwebtoken"
-import passport from "passport";
-import profile from "../models/profile.js";
 import profileModel from "../models/profile.js";
 
-const authCheck = passport.authenticate("jwt", { session : false }) //auto
 
 
 const signup = async (req, res) => {

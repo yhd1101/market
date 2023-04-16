@@ -1,7 +1,6 @@
 import express from "express";
 import passport from "passport"
 import { createProfile } from "../controller/profile.js"
-import profileModel from "../models/profile.js";
 
 const router = express.Router()
 
