@@ -23,5 +23,26 @@ const createProfile = async (req, res) => {
         })
     }
 }
+const updateProfile = async (req, res) => {
+    const { bio, birth, phone } = req.body
+    try{
+        const profile = await profileModel.findOne({user : req.user._id})
+        console.log(profile)
+        if(profile){
+            profile.bio = bio ? bio : profile.bio
+            profile.birth = birth ? birth : profile.birth
+            profile.phone = phone ? phone : profile.phone
+        }
+        await profile.save()
+        res.json({
+            msg : `updated profile by ${req.user._id}`
+        })
 
-export {createProfile}
+    } catch (err){
+        res.status(500).json({
+            msg : err
+        })
+    }
+
+}
+export {createProfile, updateProfile}

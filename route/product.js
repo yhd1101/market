@@ -18,52 +18,31 @@ router.get("/:productId", getProductId)
 router.get("/brand", brandProduct)
 
 router.put("/:productId", checkAuth, async (req, res) => {
+    const { name, price, brand, picture, region, desc1, desc2, category } = req.body
 
     try {
 
         const product = await productModel.findById(req.params.productId)
-        console.log(product.seller.toString())
-        console.log(req.params.productId)
+
         if(product.seller.toString() !== req.user._id.toString()){
              return res.status(404).json({
                  msg : "수정권한 없음"
              })
         }
-        //제품 업데이트(수정)
-        // const updateProductFields = {}
-        // updateProductFields.seller = req.user._id
-        // if (name) updateProductFields.name = name
-        // if (price) updateProductFields.price = price
-        // if (brand) updateProductFields.brand = brand
-        // if (picture) updateProductFields.picture = picture
-        // if (region) updateProductFields.region = region
-        // if (desc1) updateProductFields.desc1 = desc1
-        // if (desc2) updateProductFields.desc2 = desc2
-        // if (typeof category !== "undefined") {
-        //     updateProductFields.category = category.split(",")
-        // }
-        // await productModel.findByIdAndUpdate(
-        //     req.params.productId,
-        //     { $set : updateProductFields },
-        //     { new : true }
-        // )
-        // res.json({
-        //     msg : `updated product by ${req.params.productId}`
-        // })
         if (product) {
-            product.name = name
-            product.price = price
-            product.brand = brand
-            product.picture = picture
-            product.region = region
-            product.desc1 = desc1
-            product.desc2 = desc2
-            product.category = category
+            product.name = name ? name : product.name
+            product.price = price ? price : product.price
+            product.brand = brand ? brand : product.brand
+            product.picture = picture ? picture : product.picture
+            product.region = region ? region : product.region
+            product.desc1 = desc1 ? desc1 : product.desc1
+            product.desc2 = desc2 ? desc2 : product.desc2
+            product.category =category ? category : product.category
         }
         const updatedProduct = await product.save()
-        res.json({
-            msg : `updated product by ${productId}`
-        })
+         res.json({
+             msg : `updated product by ${req.params.productId}`
+         })
 
     } catch (err){
         res.status(500).json({

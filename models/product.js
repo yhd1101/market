@@ -6,11 +6,11 @@ const productSchema = mongoose.Schema(
         //  ,판매자정보 , 제품상태(평점으로할지 정해오기), 댓글기능, 좋아요기능
         name : {
             type : String,
-            required : true
+            // required : true
         },
         price : {
             type : Number,
-            required : true
+            // required : true
         },
         brand : {
             type : String,
@@ -26,11 +26,11 @@ const productSchema = mongoose.Schema(
         },
         region : {
             type : String,
-            required : true
+            // required : true
         },
         desc1 : {
             type : String,
-            required : true
+            // required : true
         },
         desc2 : {
             type : String,
@@ -43,22 +43,9 @@ const productSchema = mongoose.Schema(
         seller : {
             type : mongoose.Schema.Types.ObjectId,
             ref : "user",
-            required : true
-        },
-        heart : {  //좋아요 기능
-            count: {
-                type :Number,
-                default :0
-            }
-        },
-        comment : {
-            type :String,
-            required : true
+            // required : true
         },
 
-        grade : { //평점
-
-        }
 
 
     },

@@ -72,6 +72,33 @@ router.get("/", checkAuth, async (req, res) => {
     }
 })
 
+router.put("/:reservationId", checkAuth, async (req ,res) => {
+    const {  promise, memo } = req.body
+
+    try{
+        const reservation = await reservationModel.findById(req.params.reservationId)
+        if(reservation.user.toString() !== req.user._id.toString()){
+            return res.status(404).json({
+                msg : "수정권한 없음"
+            })
+        }
+
+        if(reservation){
+            reservation.promise = promise ? promise : reservation.promise
+            reservation.memo = memo ? memo : reservation.memo
+        }
+        await reservation.save()
+        res.json({
+            msg : `updated reservation by ${req.params.reservationId}`
+        })
+
+    } catch (err) {
+        res.status(500).json({
+            msg : err
+        })
+    }
+})
+
 
 
 
