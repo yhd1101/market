@@ -9,6 +9,7 @@ import passportConfig from "./config/passport.js";
 import userRoutes from "./route/user.js"
 import profileRoutes from "./route/profile.js"
 import productRoutes from "./route/product.js"
+import reservationRoutes from "./route/reservation.js"
 
 
 const app = express()
@@ -24,6 +25,7 @@ passportConfig(passport)
 app.use("/user", userRoutes)
 app.use("/profile", profileRoutes)
 app.use("/product", productRoutes)
+app.use("/reservation", reservationRoutes)
 
 const port = process.env.PORT || 8500
 

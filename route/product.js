@@ -1,95 +1,24 @@
 import express from "express";
 import passport from "passport";
 import productModel from "../models/product.js";
-
+import {createProduct, getProduct, getProductId, brandProduct} from  "../controller/product.js"
 
 const router = express.Router()
 
 const checkAuth = passport.authenticate("jwt", { session : false })
 //등록하기
-router.post("/create", checkAuth, async (req, res) => {
-    console.log(req.body)
-    const {
-        name,
-        price,
-        brand,
-        picture,
-        category,
-        region,
-        desc1,
-        desc2,
-    } = req.body
-
-    try{
-        const newProduct = await productModel({
-            name,
-            price,
-            brand,
-            picture,
-            category,
-            region,
-            desc1,
-            desc2,
-            seller: req.user._id
-        })
-
-        const product = await newProduct.save()
-        res.json({
-            msg : "Successful product",
-            product : product
-        })
-    } catch (err){
-        res.status(500).json({
-            msg : err
-        })
-    }
-
-})
+router.post("/create", checkAuth, createProduct)
 //product 전체 불러오는 api
-router.get("/", async (req, res) => {
-    try {
-        const products = await productModel.find().sort({createdAt : -1}) //최신
-        res.json({
-            msg : "Successful get products",
-            count : products.length,
-            products
-        })
-
-    } catch (err){
-        res.status(500).json({
-            msg : err
-        })
-    }
-})
+router.get("/", getProduct)
 
 //product 상세 정보 가져오는 api(상세페이지)
-router.get("/:productId", async (req, res) => {
-    try {
-        const product = await productModel.findById(req.params.productId)
-        res.json({
-            msg : `Successful get product by ${req.params.productId}`,
-            product
-        })
+router.get("/:productId", getProductId)
 
-    } catch (err){
-        res.status(500).json({
-            msg : err
-        })
-    }
-})
+//카테고리별로 데이터가저오는 api
+router.get("/brand", brandProduct)
 
 router.put("/:productId", checkAuth, async (req, res) => {
-    //등록된 제품과 로그인한사람이 일치해야함
-    const {
-        name,
-        price,
-        brand,
-        picture,
-        category,
-        region,
-        desc1,
-        desc2
-    } = req.body
+
     try {
 
         const product = await productModel.findById(req.params.productId)
@@ -147,8 +76,6 @@ router.put("/:productId", checkAuth, async (req, res) => {
 router.delete("/:productId", checkAuth, async (req, res) => {
     try{
         const product = await productModel.findById(req.params.productId)
-        console.log(product.seller.toString())
-        console.log(req.user._id)
         if(product.seller.toString() !== req.user._id.toString()){
             return res.status(404).json({
                 msg : "삭제권한 없음."

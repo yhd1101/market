@@ -2,7 +2,8 @@ import mongoose from "mongoose";
 
 const productSchema = mongoose.Schema(
     {
-        //이름, 사진, 카테고리, 지역,설명,가격,판매자정보
+        //이름,가격 , 브랜드, 사진 ,카테고리,지역,내용1,내용2
+        //  ,판매자정보 , 제품상태(평점으로할지 정해오기), 댓글기능, 좋아요기능
         name : {
             type : String,
             required : true
@@ -43,7 +44,22 @@ const productSchema = mongoose.Schema(
             type : mongoose.Schema.Types.ObjectId,
             ref : "user",
             required : true
+        },
+        heart : {  //좋아요 기능
+            count: {
+                type :Number,
+                default :0
+            }
+        },
+        comment : {
+            type :String,
+            required : true
+        },
+
+        grade : { //평점
+
         }
+
 
     },
     {
